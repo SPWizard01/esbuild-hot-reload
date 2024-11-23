@@ -35,8 +35,6 @@ export function esbuildHMRPlugin(devPort: number) {
                 }
             }
             build.onStart(() => {
-                console.log(entryPoints)
-                console.log("HMR Plugin started");
                 addedEnryPoints.clear();
             })
             build.onLoad({ filter: /\.m?[t|j]sx?$/ }, async (args) => {
