@@ -2,7 +2,7 @@
   "name": "esbuild-hot-reload",
   "description": "A simple Hot reload plugin for esbuild.",
   "author": "SPWizard01 (https://github.com/SPWizard01/esbuild-hot-reload)",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/SPWizard01/esbuild-hot-reload"

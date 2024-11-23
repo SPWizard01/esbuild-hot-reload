@@ -6,9 +6,38 @@ export function esbuildHMRPlugin(devPort: number) {
     const bunHMRPlugin: Plugin = {
         name: "esbuild-hot-reload",
         setup(build) {
-            let hmrAdded = false;
-            build.onStart(()=>{
-                hmrAdded = false;
+            const entryPoints: string[] = [];
+            const addedEnryPoints = new Set<string>();
+            if (build.initialOptions.entryPoints) {
+                if (Array.isArray(build.initialOptions.entryPoints)) {
+                    build.initialOptions.entryPoints.forEach(entry => {
+                        let entryPath = "";
+                        if (typeof entry === "string") {
+                            entryPath = entry.replace(/^\.*/, "");
+                        } else {
+                            entryPath = entry.in.replace(/^\.*/, "");
+                        }
+                        if (process.platform === "win32") {
+                            entryPath = entryPath.replace(/\//g, "\\");
+                        }
+                        entryPoints.push(entryPath);
+                    })
+                }
+                else {
+                    const entryObject = build.initialOptions.entryPoints as Record<string, string>;
+                    Object.keys(entryObject).forEach(entry => {
+                        let entryPath = entryObject[entry].replace(/^\.*/, "");
+                        if (process.platform === "win32") {
+                            entryPath = entryPath.replace(/\//g, "\\");
+                        }
+                        entryPoints.push(entryPath);
+                    });
+                }
+            }
+            build.onStart(() => {
+                console.log(entryPoints)
+                console.log("HMR Plugin started");
+                addedEnryPoints.clear();
             })
             build.onLoad({ filter: /\.m?[t|j]sx?$/ }, async (args) => {
                 const contents = await readFile(args.path, { encoding: "utf-8" });
@@ -17,8 +46,8 @@ export function esbuildHMRPlugin(devPort: number) {
                 const isJS = /\.m?js$/.test(args.path);
                 const isTS = /\.m?ts$/.test(args.path);
                 const loader: Loader = isTSx ? "tsx" : isJSx ? "jsx" : isTS ? "ts" : isJS ? "js" : "empty";
-                if (!hmrAdded) {
-                    hmrAdded = true;
+                const isEntry = entryPoints.some(entry => args.path.endsWith(entry))
+                if (!addedEnryPoints.has(args.path) && isEntry) {
                     return { contents: `import "esbuild-hot-reload"\n` + contents, loader };
                 }
                 return { contents, loader };
