@@ -1,12 +1,35 @@
 {
   "name": "esbuild-hot-reload",
+  "description": "A simple Hot reload plugin for esbuild.",
+  "author": "SPWizard01 (https://github.com/SPWizard01/esbuild-hot-reload)",
+  "version": "1.0.3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SPWizard01/esbuild-hot-reload"
+  },
+  "keywords": [
+    "esbuild",
+    "hmr",
+    "reload",
+    "hot"
+  ],
   "module": "index.ts",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "bun run bun.build.ts",
+    "prepublish": "bun run bun.build.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "esbuild": "^0.24.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.7.2"
   }
 }

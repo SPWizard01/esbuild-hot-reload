@@ -1,15 +1,40 @@
 # esbuild-hot-reload
 
-To install dependencies:
+A simple Hot Reload plugin.
 
-```bash
-bun install
+`npm i esbuild-hot-reload`
+or
+`bun i esbuild-hot-reload`
+
+Available in 2 falvors,
+
+```ts
+import { esbuildHMRPlugin } from "esbuild-hot-reload";
+export const esbuildConfig = {
+    //...
+    plugins: [
+        esbuildHMRPlugin(123)
+    ]
+}
 ```
 
-To run:
+Results in 1 addition of a JS code in your bundle;
 
-```bash
-bun run index.ts
+```ts
+import { esbuildHotRealoadFooterPlugin } from "esbuild-hot-reload";
+export const esbuildConfig = {
+    //...
+    plugins: [
+        esbuildHotRealoadFooterPlugin(123)
+    ]
+}
+```
+Results in addition of a JS code to each of your files in `footer` region
+
+
+```ts
+import { esbuildHotReloadString } from "esbuild-hot-reload";
+const aStringJs = esbuildHotReloadString(123);
 ```
 
-This project was created using `bun init` in bun v1.1.36. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Gives you the string that is added, in case you want to do anything with it.
