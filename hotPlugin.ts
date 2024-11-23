@@ -46,6 +46,7 @@ export function esbuildHMRPlugin(devPort: number) {
                 const loader: Loader = isTSx ? "tsx" : isJSx ? "jsx" : isTS ? "ts" : isJS ? "js" : "empty";
                 const isEntry = entryPoints.some(entry => args.path.endsWith(entry))
                 if (!addedEnryPoints.has(args.path) && isEntry) {
+                    addedEnryPoints.add(args.path);
                     return { contents: `import "esbuild-hot-reload"\n` + contents, loader };
                 }
                 return { contents, loader };
